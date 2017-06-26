@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 #Jun 26 添加判断获取超时机制,定为v1.3版吧
+#Jun 26 pm 修复重要错误：pic_data = res.read()超时终止。v1.4
 import urllib2
 import urllib
 import re
@@ -58,16 +59,21 @@ def download(word,num):
 			#一开始用的res = urllib.urlopen(each, timeout = 5)一直报错，提示没有timeout参数
 			res = urllib2.urlopen(each, timeout = 5)
 		except Exception as e:
-			print e
+			print 'res: '+str(e)
 			continue
+		try:
+			pic_data = res.read()
+		except Exception as e:
+			print 'pic_data: '+str(e)
+			continue
+	
 		
-		data = res.read()
 		#添加时间显示，如果卡住了，可以知道卡多久了。
-		print str(len(data)/1024)+'kb  '+str(time.strftime('%H:%M:%S',time.localtime(time.time())))
-		if len(data)>10000:
+		print str(len(pic_data)/1024)+'kb  '+str(time.strftime('%H:%M:%S',time.localtime(time.time())))
+		if len(pic_data)>10000:
 			number = number +1
 			f=open('./py/'+str(word)+str(number)+'.jpg', 'w+')
-			f.write(data)
+			f.write(pic_data)
 			f.close()
 		else:
 			print '小于10k，丢弃图片'
@@ -75,7 +81,7 @@ def download(word,num):
 		#except:
 		#	print('获取失败')
 		
-		data=None
+		pic_data = None
 		print('任务编号： '+str(i)+'   '+'图片编号： '+str(number)+'   '+'无法获取个数：'+str(i-number))
 		print('  ')
 		print('  ')
@@ -92,7 +98,7 @@ if __name__ == '__main__':
 
 
 	#更高端一点可以设置50%的失败率上限,不过有个问题，如果是数量比较小的话这个百分比就没意义了
-	l = int(n//30*2+2)
+	l = int(n//10+2)
 	i = number = 0 
 	#多变量赋值用等号连接
 	#for i in range (1, 5)	结果是1，2，3，4
