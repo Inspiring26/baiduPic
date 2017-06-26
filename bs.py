@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+#Jun 26 添加判断获取超时机制,定为v1.3版吧
 import urllib2
 import urllib
 import re
@@ -49,21 +50,30 @@ def download(word,num):
 	
 	for each in picurl:
 		i = i + 1
+		#try:
+		each = deCode(each)
+		#给urlopen加上timeout,防止程序卡死在read()方法里
+		#data=urllib.urlopen(each).read()
 		try:
-			each = deCode(each)
-			data=urllib.urlopen(each).read()
-			#添加时间显示，如果卡住了，可以知道卡多久了。
-			print str(len(data)/1024)+'kb  '+str(time.strftime('%H:%M:%S',time.localtime(time.time())))
-			if len(data)>10000:
-				number = number +1
-				f=open('./py/'+str(word)+str(number)+'.jpg', 'w+')
-				f.write(data)
-				f.close()
-			else:
-				print '小于10k，丢弃图片'
+			#一开始用的res = urllib.urlopen(each, timeout = 5)一直报错，提示没有timeout参数
+			res = urllib2.urlopen(each, timeout = 5)
+		except Exception as e:
+			print e
+			continue
+		
+		data = res.read()
+		#添加时间显示，如果卡住了，可以知道卡多久了。
+		print str(len(data)/1024)+'kb  '+str(time.strftime('%H:%M:%S',time.localtime(time.time())))
+		if len(data)>10000:
+			number = number +1
+			f=open('./py/'+str(word)+str(number)+'.jpg', 'w+')
+			f.write(data)
+			f.close()
+		else:
+			print '小于10k，丢弃图片'
 
-		except:
-			print('获取失败')
+		#except:
+		#	print('获取失败')
 		
 		data=None
 		print('任务编号： '+str(i)+'   '+'图片编号： '+str(number)+'   '+'无法获取个数：'+str(i-number))
@@ -76,7 +86,7 @@ if __name__ == '__main__':
 	#可以修改程序使之能够指定名字，指定爬取个数。
 	word = '刘亦菲古装剧照'
 	#指定个数n
-	n = 10
+	n = 20
 
 
 
