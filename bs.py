@@ -75,7 +75,7 @@ def download(word,num):
 	
 	picurl = getImgLinks(cont)
 	if len(picurl)<30:
-		print 'len(picurl)小于30，只有'+len(picurl)+'个'
+		print 'len(picurl)小于30，只有'+str(len(picurl))+'个'
 		mark = 1
 	
 	for each in picurl:
