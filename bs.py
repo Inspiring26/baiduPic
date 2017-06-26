@@ -2,6 +2,7 @@
 #Jun 26 添加判断获取超时机制,定为v1.3版吧
 #Jun 26 pm 修复重要错误：pic_data = res.read()超时终止。v1.4
 #Jun 26 midnight 总算体会到了，写程序要多用try...expect了。版本v1.5
+#v1.5 关了其他程序，好好测试v1.5，先测能不能到10万，再测有没有尽头，测尽头可以找个小众的资源
 import urllib2
 import urllib
 import re
@@ -62,6 +63,7 @@ def getImgLinks(cont):
 
 def download(word,num):
 	global i, number, n
+	mark = 0
 
 	url = more_urlss(word,num)
 	#虽然这里不常出错，但是我当程序停住的时候，我按ctrl+c，提示这里有问题
@@ -74,6 +76,7 @@ def download(word,num):
 	picurl = getImgLinks(cont)
 	if len(picurl)<30:
 		print 'len(picurl)小于30，只有'+len(picurl)+'个'
+		mark = 1
 	
 	for each in picurl:
 		i = i + 1
@@ -116,6 +119,8 @@ def download(word,num):
 		print('任务编号： '+str(i)+'   '+'图片编号： '+str(number)+'   '+'无法获取个数：'+str(i-number))
 		print('  ')
 		print('  ')
+		if mark == 1:
+			print '一页不足30个图片，到尽头了，即将终止'
 		if number==n:
 				exit(0)	
 
