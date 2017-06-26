@@ -122,7 +122,8 @@ def download(word,num):
 		if mark == 1:
 			print '一页不足30个图片，到尽头了，即将终止'
 		if number==n:
-				exit(0)	
+			print '程序完成!'
+			exit(0)	
 
 if __name__ == '__main__':
 	#可以修改程序使之能够指定名字，指定爬取个数。
