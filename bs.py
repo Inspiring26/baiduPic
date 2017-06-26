@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 #Jun 26 添加判断获取超时机制,定为v1.3版吧
 #Jun 26 pm 修复重要错误：pic_data = res.read()超时终止。v1.4
+#Jun 26 midnight 总算体会到了，写程序要多用try...expect了。版本v1.5
 import urllib2
 import urllib
 import re
@@ -32,13 +33,30 @@ def more_urlss(word,num):
 	return url
 
 def getHtml(url):
-	response = urllib2.urlopen(url)
-	cont = response.read()
+	try:
+		response = urllib2.urlopen(url, timeout = 10)
+	except Exception as e:
+		print 'respone: '+str(e)
+	
+	
+	#当程序停住的时候，我按ctrl+c，也提示这一句的问题，当时爬了30655个图片
+	#也用一下try
+	try:
+		cont = response.read()
+	except Exception as e:
+		print 'cont: '+str(e)
+		
+	
 	return cont
 
 
 def getImgLinks(cont):
-	picurl = re.findall('"objURL":"(.*?)"',cont)
+	try:
+		picurl = re.findall('"objURL":"(.*?)"',cont)
+	except Exception as e:
+		print 'picurl: '+str(e)
+		
+	
 	return picurl
 
 
@@ -46,8 +64,16 @@ def download(word,num):
 	global i, number, n
 
 	url = more_urlss(word,num)
-	cont = getHtml(url)
+	#虽然这里不常出错，但是我当程序停住的时候，我按ctrl+c，提示这里有问题
+	try:
+		cont = getHtml(url)
+	except Exception as e:
+		print 'cont: '+str(e)
+		
+	
 	picurl = getImgLinks(cont)
+	if len(picurl)<30:
+		print 'len(picurl)小于30，只有'+len(picurl)+'个'
 	
 	for each in picurl:
 		i = i + 1
@@ -72,9 +98,14 @@ def download(word,num):
 		print str(len(pic_data)/1024)+'kb  '+str(time.strftime('%H:%M:%S',time.localtime(time.time())))
 		if len(pic_data)>10000:
 			number = number +1
-			f=open('./py/'+str(word)+str(number)+'.jpg', 'w+')
-			f.write(pic_data)
-			f.close()
+			try:
+				f=open('./py/'+str(word)+str(number)+'.jpg', 'w+')
+				f.write(pic_data)
+				f.close()
+			except Exception as e:
+				print 'save_error: '+str(e)
+				continue
+			
 		else:
 			print '小于10k，丢弃图片'
 
@@ -92,7 +123,7 @@ if __name__ == '__main__':
 	#可以修改程序使之能够指定名字，指定爬取个数。
 	word = '刘亦菲古装剧照'
 	#指定个数n
-	n = 20
+	n = 100
 
 
 
@@ -103,8 +134,8 @@ if __name__ == '__main__':
 	#多变量赋值用等号连接
 	#for i in range (1, 5)	结果是1，2，3，4
 	#记住3才是2
-	for j in xrange(1,l):
-		download(word, j)
+	for num in xrange(1, l):
+		download(word, num)
 
 
 
