@@ -77,8 +77,11 @@ def download(word,num):
 	
 	picurl = getImgLinks(cont)
 	if len(picurl)<30:
-		print 'len(picurl)小于30，只有'+str(len(picurl))+'个'
+		print '页面图片数小于30，只有'+str(len(picurl))+'个'
 		mark = 1
+		countdown = len(picurl)
+	if len(picurl)==0:
+		print '爬虫结束。 最多只能获取' + str(number) + '张图片。'
 	
 	for each in picurl:
 		i = i + 1
@@ -123,7 +126,8 @@ def download(word,num):
 		print('  ')
 		print('  ')
 		if mark == 1:
-			print '一页不足30个图片，到尽头了，即将终止'
+			print '一页不足30个图片，即将终止...' + str(countdown)
+			countdown = countdown - 1
 		if number==n:
 			print '程序完成!'
 			exit(0)	
@@ -217,10 +221,15 @@ if __name__ == '__main__':
 	n = 10
 
 
-
+	#检查并创建指定文件夹
 	b = translate(word)
-	print b
-	os.mkdir(b)
+	if not os.path.isdir(b):
+		os.mkdir(b)
+		print '创建文件夹：' + str(b)
+	else:
+		print '已存在文件夹：' + str(b)
+		print '图片将保存到文件夹：' + str(b)
+	
 	#更高端一点可以设置50%的失败率上限,不过有个问题，如果是数量比较小的话这个百分比就没意义了
 	l = int(n//10+2)
 	i = number = 0 
