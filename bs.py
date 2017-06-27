@@ -4,6 +4,7 @@
 #Jun 26 midnight 总算体会到了，写程序要多用try...expect了。版本v1.5
 #v1.5 关了其他程序，好好测试v1.5，先测能不能到10万，再测有没有尽头，测尽头可以找个小众的资源
 #版本v1.6 新功能：1.提取关键字首字母2.创建首字母名的文件夹。其他：夜里测试v1.5爬取十万图片成功了！！
+#v1.7 新功能：1.改进对try...expect的处理，出错后赋值为None,免得下一步提示未声明
 import urllib2
 import urllib
 import re
@@ -40,6 +41,8 @@ def getHtml(url):
 		response = urllib2.urlopen(url, timeout = 10)
 	except Exception as e:
 		print 'respone: '+str(e)
+		#如果出错，下一步不会提示response未定义
+		response = None
 	
 	
 	#当程序停住的时候，我按ctrl+c，也提示这一句的问题，当时爬了30655个图片
@@ -48,6 +51,7 @@ def getHtml(url):
 		cont = response.read()
 	except Exception as e:
 		print 'cont: '+str(e)
+		cont = None
 		
 	
 	return cont
@@ -55,9 +59,10 @@ def getHtml(url):
 
 def getImgLinks(cont):
 	try:
-		picurl = re.findall('"objURL":"(.*?)"',cont)
+		picurl = re.findall('"objURL":"(.*?)"', cont)
 	except Exception as e:
 		print 'picurl: '+str(e)
+		picurl = None
 		
 	
 	return picurl
@@ -73,15 +78,17 @@ def download(word,num):
 		cont = getHtml(url)
 	except Exception as e:
 		print 'cont: '+str(e)
-		
+		cont = None
 	
 	picurl = getImgLinks(cont)
+	if len(picurl)==0:
+		print '爬虫结束。 最多只能获取' + str(number) + '张图片。'
+		exit(0)
 	if len(picurl)<30:
 		print '页面图片数小于30，只有'+str(len(picurl))+'个'
 		mark = 1
 		countdown = len(picurl)
-	if len(picurl)==0:
-		print '爬虫结束。 最多只能获取' + str(number) + '张图片。'
+
 	
 	for each in picurl:
 		i = i + 1
@@ -94,11 +101,13 @@ def download(word,num):
 			res = urllib2.urlopen(each, timeout = 5)
 		except Exception as e:
 			print 'res: '+str(e)
+			res = None
 			continue
 		try:
 			pic_data = res.read()
 		except Exception as e:
 			print 'pic_data: '+str(e)
+			pic_data = None
 			continue
 	
 		
@@ -120,14 +129,16 @@ def download(word,num):
 
 		#except:
 		#	print('获取失败')
-		
+		if mark == 1:
+			print '一页不足30个图片，即将终止...' + str(countdown)
+			countdown = countdown - 1
+
 		pic_data = None
 		print('任务编号： '+str(i)+'   '+'图片编号： '+str(number)+'   '+'无法获取个数：'+str(i-number))
 		print('  ')
 		print('  ')
-		if mark == 1:
-			print '一页不足30个图片，即将终止...' + str(countdown)
-			countdown = countdown - 1
+		
+			
 		if number==n:
 			print '程序完成!'
 			exit(0)	
