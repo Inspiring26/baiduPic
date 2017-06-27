@@ -5,7 +5,7 @@
 #v1.5 关了其他程序，好好测试v1.5，先测能不能到10万，再测有没有尽头，测尽头可以找个小众的资源
 #版本v1.6 新功能：1.提取关键字首字母2.创建首字母名的文件夹。其他：夜里测试v1.5爬取十万图片成功了！！
 #v1.7 新功能：1.改进对try...expect的处理，出错后赋值为None,免得下一步提示未声明
-#v1.71 改进一处逻辑问题
+#v1.7.1 改进一处逻辑问题	v1.7.2 修改最后的显示方式
 import urllib2
 import urllib
 import re
@@ -133,6 +133,9 @@ def download(word,num):
 		pic_data = None
 		if mark == 1:
 			print '一页不足30个图片，即将终止...' + str(countdown)
+			print('任务编号： '+str(i)+'   '+'图片编号： '+str(number)+'   '+'无法获取个数：'+str(i-number))
+			print('  ')
+			print('  ')
 			countdown = countdown - 1
 		else:
 			print('任务编号： '+str(i)+'   '+'图片编号： '+str(number)+'   '+'无法获取个数：'+str(i-number))
