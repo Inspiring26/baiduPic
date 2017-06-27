@@ -3,6 +3,7 @@
 #Jun 26 pm 修复重要错误：pic_data = res.read()超时终止。v1.4
 #Jun 26 midnight 总算体会到了，写程序要多用try...expect了。版本v1.5
 #v1.5 关了其他程序，好好测试v1.5，先测能不能到10万，再测有没有尽头，测尽头可以找个小众的资源
+#版本v1.6 新功能：1.提取关键字首字母2.创建首字母名的文件夹。其他：夜里测试v1.5爬取十万图片成功了！！
 import urllib2
 import urllib
 import re
