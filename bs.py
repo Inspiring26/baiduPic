@@ -6,6 +6,7 @@
 #版本v1.6 新功能：1.提取关键字首字母2.创建首字母名的文件夹。其他：夜里测试v1.5爬取十万图片成功了！！
 #v1.7 新功能：1.改进对try...expect的处理，出错后赋值为None,免得下一步提示未声明
 #v1.7.1 改进一处逻辑问题	v1.7.2 修改最后的显示方式
+#v1.8 新功能：1.添加输入关键字和数量，方便别人使用2.其他的一些细节改进
 import urllib2
 import urllib
 import re
@@ -231,9 +232,14 @@ def translate(str_input):
 
 if __name__ == '__main__':
 #可以修改程序使之能够指定名字，指定爬取个数。
-	word = '刘亦菲古装剧照'
+	print 'version:1.8' + ' author:huangyong'
+	word = raw_input('请输入关键字：')
+	word = str(word)
+	#word = '刘亦菲古装剧照'
 	#指定个数n
-	n = 10
+	n = raw_input('请输入要爬取的图片数量：')
+	n = int(n)
+	#n = 10
 
 
 	#检查并创建指定文件夹
@@ -243,7 +249,7 @@ if __name__ == '__main__':
 		print '创建文件夹：' + str(b)
 	else:
 		print '已存在文件夹：' + str(b)
-		print '图片将保存到文件夹：' + str(b)
+		print '图片将保存到文件夹：' + str(b) + '，并覆盖原有同名文件。'
 	
 	#更高端一点可以设置50%的失败率上限,不过有个问题，如果是数量比较小的话这个百分比就没意义了
 	l = int(n//10+2)
