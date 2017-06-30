@@ -4,25 +4,39 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.io.File;
 
 public class Downloadpic{
 
-	public static void download(String url){
+	public static void download(String url, String fileDir){
+		Count c = new Count();
 		// 创建实例
-		Downloadpic pic = new Downloadpic();
+		// 为什么创建实例，因为下面可以用pic.saveUrlAs方法，
+		// 不过好像意义也不大
+		// Downloadpic pic = new Downloadpic();
 		// 需要下载的url
 		String photoUrl = url;
+		String filePath = fileDir;
+
+		// 图片保存路径
+		// filePath = "./jimage/";
 		// 截取最后的／后面的字符串作为图片名
 		// 这个截取方式很好，要记住，短的字符串可以直接用substring截取，不一定都要用正则表达式
-		String fileName = photoUrl.substring(photoUrl.lastIndexOf("/"));
-		// 图片保存路径
-		String filePath = "./jimage/";
+		// String fileName = photoUrl.substring(photoUrl.lastIndexOf("/"));
 		// 调用函数，并进行传参
-		boolean flag = pic.saveUrlAs(photoUrl,filePath+fileName);
-		System.out.println("Run ok!\n Get URL file "+flag);
-		System.out.println(filePath);
-		System.out.println(fileName);
+		String fileName = Spider.word+Count.number+".jpg";
+		boolean flag = saveUrlAs(photoUrl,filePath+"/"+fileName);
+		System.out.println("成功下载： "+flag);
+		if (flag) {
+			Count.number++;
+			
+		}
+		// System.out.println(filePath);
+		// System.out.println(fileName);
+		System.out.println("");
+
 	}
+
 	public static boolean saveUrlAs(String fileUrl, String savePath){
 		try{
 			// 将网络资源地址传给url
@@ -52,5 +66,35 @@ public class Downloadpic{
 			return false;
 		}
 	}
+
+	// 创建目录的方法，，这里说的方法是着类中的方法，不是指怎么做
+	public static boolean createDir(String DirName){
+		File dir = new File(DirName);
+		// 判断目录存在性，用的是File类的方法exists()
+		if (dir.exists()) {
+			System.out.println("创建目录失败，目录已存在。");
+			return false;
+		}
+		// 创建目录和检查目录存在性，用的都是File类下的方法，它们的返回值都是布尔值
+		if (dir.mkdirs()) {
+			System.out.println("创建目录成功。");
+			return true;	
+		}else{
+			System.out.println("创建目录失败。");
+			return false;	
+
+		}
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+

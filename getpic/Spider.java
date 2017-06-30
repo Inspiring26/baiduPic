@@ -1,6 +1,11 @@
 
 /*
  v1.0 目前是可以实现基本的功能的，通过word输入关键词、j控制下载页面数
+ v2.0 1.提升了对静态变量的使用。2.学会实现全局变量的功能。
+      java中没有全局变量概念，我们可以声明一个类作为全局变量功能
+ 	  static表示“全局”或者“静态”的意思
+ 	  被static修饰的变量和方法，被类的所有实例共享。
+ 	  因此Count c = new Count(); c.number引用，这种方式可以换为Count.number  
 
 
 */
@@ -13,25 +18,36 @@ import java.util.regex.*;
 
 public class Spider{
 	static String str_array[] = new String[30];
-	static int number = 0;
+	static int n = 5;
+	static String word = "刘亦菲古装剧照";
+
+
 	public static void main(String[] args) {
-		String word = "刘亦菲古装剧照";
+		Downloadpic pic = new Downloadpic();
+		
+		// 创建文件夹
+		boolean b = pic.createDir(word);
+
 		String pageUrl = "";
 		String pageContent = "";
 
-		Downloadpic pic = new Downloadpic();
 		
 		
 
-		for (int j=1;j<=2 ;j++ ) {
+		for (int j=1;j<=(n/10+2) ;j++ ) {
 			pageUrl = firstPageUrl(word, j);
 			pageContent = getPageContent(pageUrl);
 			fromPageGetImageUrls(pageContent);
 			
 			for (int i=0;i<30 ;i++) {
-				System.out.println(i+"....");
-				System.out.println(decode(str_array[i]));
-				pic.download(decode(str_array[i]));
+				if (Count.number>n) {
+				System.out.println("下载完成。");
+				System.exit(0);
+					
+				}
+				System.out.println(Count.number+"....");
+				// System.out.println(decode(str_array[i]));
+				pic.download(decode(str_array[i]), word);
 				
 
 
