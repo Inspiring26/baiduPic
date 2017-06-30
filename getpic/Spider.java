@@ -18,6 +18,7 @@ import java.util.regex.*;
 
 public class Spider{
 	static String str_array[] = new String[30];
+	// 在此输入爬取数量和关键字
 	static int n = 5;
 	static String word = "刘亦菲古装剧照";
 
@@ -35,19 +36,22 @@ public class Spider{
 		
 
 		for (int j=1;j<=(n/10+2) ;j++ ) {
+			// 获取相关数据
 			pageUrl = firstPageUrl(word, j);
 			pageContent = getPageContent(pageUrl);
 			fromPageGetImageUrls(pageContent);
-			
+
+			// 判断是否该结束
 			for (int i=0;i<30 ;i++) {
 				if (Count.number>n) {
 				System.out.println("下载完成。");
 				System.exit(0);
 					
 				}
-				System.out.println(Count.number+"....");
-				// System.out.println(decode(str_array[i]));
-				pic.download(decode(str_array[i]), word);
+
+			// 打印序号并下载图片
+			System.out.println(Count.number+"....");
+			pic.download(decode(str_array[i]), word);
 				
 
 
@@ -99,17 +103,11 @@ public class Spider{
 		URL realUrl = new URL(begin_url);
 		URLConnection conn = realUrl.openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		//System.out.println(reader);
-		int i = 1;
 		
 		while((line=reader.readLine())!=null){
-		//System.out.println("第"+i+"行...  ");
-		//System.out.println(line);
-		//i++;
-		result += line; 
+			result += line; 
 		}
-		//String line = reader.readLine();
-		//System.out.println(result);
+		
 
 
 	}catch(Exception e){
@@ -141,19 +139,18 @@ public class Spider{
 		String question0, question1 = "";
 		Pattern pattern = Pattern.compile("objURL\":\"(.+?)\",");
 		Matcher matcher=pattern.matcher(pageContent);
-		int i=0;
+		Count.markNumber = 0;
 		while (matcher.find()) {
 			question0 = matcher.group(0);
 			question1 = matcher.group(1);
-			//System.out.println(question0);
-			str_array[i] = matcher.group(1);
-			i++;
-			//System.out.println(i+"....");
-			//System.out.println(matcher.group(1));
+			str_array[Count.markNumber] = matcher.group(1);
+			Count.markNumber++;
 			
-			//System.out.println(matcher.groupCount());
 		}
-
+		if (Count.markNumber<29) {
+			System.out.println("单页图片不足30张："+Count.markNumber);
+			
+		}
 
 
 		return null;

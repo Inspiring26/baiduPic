@@ -9,20 +9,11 @@ import java.io.File;
 public class Downloadpic{
 
 	public static void download(String url, String fileDir){
-		Count c = new Count();
-		// 创建实例
-		// 为什么创建实例，因为下面可以用pic.saveUrlAs方法，
-		// 不过好像意义也不大
-		// Downloadpic pic = new Downloadpic();
+		
 		// 需要下载的url
 		String photoUrl = url;
 		String filePath = fileDir;
 
-		// 图片保存路径
-		// filePath = "./jimage/";
-		// 截取最后的／后面的字符串作为图片名
-		// 这个截取方式很好，要记住，短的字符串可以直接用substring截取，不一定都要用正则表达式
-		// String fileName = photoUrl.substring(photoUrl.lastIndexOf("/"));
 		// 调用函数，并进行传参
 		String fileName = Spider.word+Count.number+".jpg";
 		boolean flag = saveUrlAs(photoUrl,filePath+"/"+fileName);
@@ -31,8 +22,6 @@ public class Downloadpic{
 			Count.number++;
 			
 		}
-		// System.out.println(filePath);
-		// System.out.println(fileName);
 		System.out.println("");
 
 	}
@@ -62,7 +51,9 @@ public class Downloadpic{
 			return true;
 
 		}catch(Exception e){
-			System.out.println(e+fileUrl+savePath);
+			System.out.println("e: "+e);
+			System.out.println("fileUrl: "+fileUrl);
+			System.out.println("savePath: "+savePath);
 			return false;
 		}
 	}
