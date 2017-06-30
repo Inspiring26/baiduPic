@@ -7,7 +7,10 @@
 #enjoy life, enjoy coding!
 
 bs.py是Linux或mac上爬取百度图片的，所有功能都在单个文件里。
+
 bsw.py是windows上爬取百度图片的，所有功能都在单个文件里。
+
+
 
 文件夹gitpic是Linux或mac上java写的爬取百度图片的，主函数在Spider.java里。
 把各个java文件下载到同一个文件夹，
