@@ -6,7 +6,7 @@
  	  static表示“全局”或者“静态”的意思
  	  被static修饰的变量和方法，被类的所有实例共享。
  	  因此Count c = new Count(); c.number引用，这种方式可以换为Count.number  
-
+  v2.1 打印标示，看看究竟是哪一步卡住了，常常是在save2 到3卡住，但是等一段时间也会通过。
 
 */
 import java.net.URLEncoder;
@@ -19,8 +19,8 @@ import java.util.regex.*;
 public class Spider{
 	static String str_array[] = new String[30];
 	// 在此输入爬取数量和关键字
-	static int n = 5;
-	static String word = "刘亦菲古装剧照";
+	static int n = 20;
+	static String word = "乔布斯壁纸";
 
 
 	public static void main(String[] args) {
@@ -69,6 +69,8 @@ public class Spider{
 
 	//获取指定页面的页面地址
 	public static String firstPageUrl(String str,int n){
+		// 标示一下以便找出是哪出了错，卡住了
+		System.out.print("firstPageUrl...   ");
 		String word = "";
 		String url = "";
 		String num = "";
@@ -79,7 +81,7 @@ public class Spider{
 		int temp = n*30;
 		num = String.valueOf(temp);
 		try{
-			word = URLEncoder.encode("刘亦菲", "utf-8");
+			word = URLEncoder.encode(str, "utf-8");
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -97,24 +99,26 @@ public class Spider{
 
 
 	public static String getPageContent(String url){
-	String begin_url = url;
-	String line, result = "";
-	try{
-		URL realUrl = new URL(begin_url);
-		URLConnection conn = realUrl.openConnection();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		
-		while((line=reader.readLine())!=null){
-			result += line; 
+		 // 打印一下以便找出错误
+		System.out.print("getPageContent...   ");
+		String begin_url = url;
+		String line, result = "";
+		try{
+			URL realUrl = new URL(begin_url);
+			URLConnection conn = realUrl.openConnection();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			while((line=reader.readLine())!=null){
+				result += line; 
+			}
+			
+
+
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		
 
-
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-
-	return result;
+		return result;
 
 	}
 
@@ -136,6 +140,8 @@ public class Spider{
 
 	//从指定页面获取所有图片地址
 	public static String fromPageGetImageUrls(String pageContent){
+		// 打印一下以便找错错误
+		System.out.print("fromPageGetImageUrls...   ");
 		String question0, question1 = "";
 		Pattern pattern = Pattern.compile("objURL\":\"(.+?)\",");
 		Matcher matcher=pattern.matcher(pageContent);

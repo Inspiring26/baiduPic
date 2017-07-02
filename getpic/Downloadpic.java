@@ -27,18 +27,27 @@ public class Downloadpic{
 	}
 
 	public static boolean saveUrlAs(String fileUrl, String savePath){
+
+
 		try{
 			// 将网络资源地址传给url
 			URL url = new URL(fileUrl);
+			System.out.print("save1...   ");
+
 			// 此为练习获得网络资源的固定格式用法，
 			// 以便后面的in变量获得url截取网络资源的输入流
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			System.out.print("save2...   ");
 			DataInputStream in = new DataInputStream(connection.getInputStream());
+			// 常常是在save2 到3卡住，但是等一段时间也会通过
+			System.out.print("save3...   ");
 			// 此处也可以用BufferedInputStream与BuffereOutputStream
 			// 需要保存的路径
 			DataOutputStream out = new DataOutputStream(new FileOutputStream(savePath));
+			System.out.print("save4...   ");
 			// 将参数savePath，即将截取的图片的存储在本地的地址赋值给out输出流所指定的地址
 			byte [] buffer = new byte[4096];
+
 			int count = 0;
 			while((count = in.read(buffer))>0){
 				// 将输入流以字节的形式读取并写入buffer中
@@ -46,12 +55,15 @@ public class Downloadpic{
 			}
 			// 后面三行为关闭输入输出流以及网络资源的固定格式
 			out.close();
+			System.out.print("save5...   ");
 			in.close();
+			System.out.print("save6...   ");
 			connection.disconnect();
+			System.out.print("save7...   ");
 			return true;
 
 		}catch(Exception e){
-			System.out.println("e: "+e);
+			System.out.println("e_write: "+e);
 			System.out.println("fileUrl: "+fileUrl);
 			System.out.println("savePath: "+savePath);
 			return false;
