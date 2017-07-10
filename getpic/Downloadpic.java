@@ -16,8 +16,10 @@ public class Downloadpic{
 		String filePath = fileDir;
 
 		// 调用函数，并进行传参
-		String fileName = Spider.word+Spider.number+".jpg";
-		boolean flag = saveUrlAs(photoUrl,filePath+"/"+fileName);
+		String fileName = filePath + "/" +Spider.word+Spider.number+".jpg";
+		// boolean flag = saveUrlAs(photoUrl,filePath+"/"+fileName);
+		boolean flag = DownloadImage.download(photoUrl, fileName);
+		
 		System.out.println("成功下载： "+flag);
 		if (flag) {
 			Spider.number++;

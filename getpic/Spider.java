@@ -10,23 +10,27 @@
 
 */
 // 经常在save2和save4处卡住，save2处问题更严重
+// v2.3 用队列存储每页的图片链接 
 import java.net.URLEncoder;
 import java.io.*;
 import java.net.*;
 import java.util.regex.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 
 public class Spider{
-	static String str_array[] = new String[30];
+	static Queue <String> queue = new LinkedList <String>();
+	// static String str_array[] = new String[30];
 	// 在此输入爬取数量和关键字
-	static int n = 20;
-	static String word = "刘亦菲";
+	static int n = 200000;
+	static String word = "周杰伦";
 
 	// 记录成功下载的图片的数量
 	static int number = 1;
 	// 记录某个页面是否有30个图片
-	static int markNumber = 0;
+	// static int markNumber = 0;
 	
 
 
@@ -49,21 +53,30 @@ public class Spider{
 			fromPageGetImageUrls(pageContent);
 
 			// 判断是否该结束
-			for (int i=0;i<30 ;i++) {
+			
+
+			// 打印序号并下载图片
+			
+
+			while(queue.size()>0){
 				if (number>n) {
-				System.out.println("下载完成。");
-				System.exit(0);
+					System.out.println("下载完成。");
+					System.exit(0);
 					
 				}
 
-			// 打印序号并下载图片
-			System.out.println(Spider.number+"....");
-			pic.download(decode(str_array[i]), word);
-				
+				System.out.println(number+"....");
+				ShowTime.showTime();
+				// link为单个图片的链接
+				String link = decode(queue.remove());
+				pic.download(link, word);
 
-
-				
 			}
+				
+
+
+				
+			
 		}
 		
 		
@@ -77,7 +90,7 @@ public class Spider{
 	//获取指定页面的页面地址
 	public static String firstPageUrl(String str,int n){
 		// 标示一下以便找出是哪出了错，卡住了
-		System.out.print("firstPageUrl...   ");
+		// System.out.print("firstPageUrl...   ");
 		String word = "";
 		String url = "";
 		String num = "";
@@ -107,7 +120,7 @@ public class Spider{
 
 	public static String getPageContent(String url){
 		 // 打印一下以便找出错误
-		System.out.print("getPageContent...   ");
+		// System.out.print("getPageContent...   ");
 		String begin_url = url;
 		String line, result = "";
 		try{
@@ -148,22 +161,23 @@ public class Spider{
 	//从指定页面获取所有图片地址
 	public static String fromPageGetImageUrls(String pageContent){
 		// 打印一下以便找错错误
-		System.out.print("fromPageGetImageUrls...   ");
+		// System.out.print("fromPageGetImageUrls...   ");
 		String question0, question1 = "";
 		Pattern pattern = Pattern.compile("objURL\":\"(.+?)\",");
 		Matcher matcher=pattern.matcher(pageContent);
-		Spider.markNumber = 0;
+		// Spider.markNumber = 0;
 		while (matcher.find()) {
 			question0 = matcher.group(0);
 			question1 = matcher.group(1);
-			str_array[Spider.markNumber] = matcher.group(1);
-			Spider.markNumber++;
+			// str_array[Spider.markNumber] = matcher.group(1);
+			queue.add(matcher.group(1));
+			// Spider.markNumber++;
 			
 		}
-		if (Spider.markNumber<29) {
-			System.out.println("单页图片不足30张："+Spider.markNumber);
+		// if (Spider.markNumber<29) {
+		// 	System.out.println("单页图片不足30张："+Spider.markNumber);
 			
-		}
+		// }
 
 
 		return null;
