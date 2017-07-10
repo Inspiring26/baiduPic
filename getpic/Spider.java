@@ -5,10 +5,11 @@
       java中没有全局变量概念，我们可以声明一个类作为全局变量功能
  	  static表示“全局”或者“静态”的意思
  	  被static修饰的变量和方法，被类的所有实例共享。
- 	  因此Count c = new Count(); c.number引用，这种方式可以换为Count.number  
+ 	  因此Spider.c = new Spider.); c.number引用，这种方式可以换为Spider.number  
   v2.1 打印标示，看看究竟是哪一步卡住了，常常是在save2 到3卡住，但是等一段时间也会通过。
 
 */
+// 经常在save2和save4处卡住，save2处问题更严重
 import java.net.URLEncoder;
 import java.io.*;
 import java.net.*;
@@ -20,7 +21,13 @@ public class Spider{
 	static String str_array[] = new String[30];
 	// 在此输入爬取数量和关键字
 	static int n = 20;
-	static String word = "乔布斯壁纸";
+	static String word = "刘亦菲";
+
+	// 记录成功下载的图片的数量
+	static int number = 1;
+	// 记录某个页面是否有30个图片
+	static int markNumber = 0;
+	
 
 
 	public static void main(String[] args) {
@@ -43,14 +50,14 @@ public class Spider{
 
 			// 判断是否该结束
 			for (int i=0;i<30 ;i++) {
-				if (Count.number>n) {
+				if (number>n) {
 				System.out.println("下载完成。");
 				System.exit(0);
 					
 				}
 
 			// 打印序号并下载图片
-			System.out.println(Count.number+"....");
+			System.out.println(Spider.number+"....");
 			pic.download(decode(str_array[i]), word);
 				
 
@@ -145,16 +152,16 @@ public class Spider{
 		String question0, question1 = "";
 		Pattern pattern = Pattern.compile("objURL\":\"(.+?)\",");
 		Matcher matcher=pattern.matcher(pageContent);
-		Count.markNumber = 0;
+		Spider.markNumber = 0;
 		while (matcher.find()) {
 			question0 = matcher.group(0);
 			question1 = matcher.group(1);
-			str_array[Count.markNumber] = matcher.group(1);
-			Count.markNumber++;
+			str_array[Spider.markNumber] = matcher.group(1);
+			Spider.markNumber++;
 			
 		}
-		if (Count.markNumber<29) {
-			System.out.println("单页图片不足30张："+Count.markNumber);
+		if (Spider.markNumber<29) {
+			System.out.println("单页图片不足30张："+Spider.markNumber);
 			
 		}
 
