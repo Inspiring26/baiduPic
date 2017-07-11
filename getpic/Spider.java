@@ -24,8 +24,8 @@ public class Spider{
 	static Queue <String> queue = new LinkedList <String>();
 	// static String str_array[] = new String[30];
 	// 在此输入爬取数量和关键字
-	static int n = 200000;
-	static String word = "周杰伦";
+	static int n = 20000;
+	static String word = "刘亦菲神雕侠侣";
 
 	// 记录成功下载的图片的数量
 	static int number = 1;

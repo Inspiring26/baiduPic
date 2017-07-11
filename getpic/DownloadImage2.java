@@ -6,7 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;  
   
   
-public class DownloadImage {  
+public class DownloadImage2 {  
   
     /** 
      * @param args 
@@ -26,16 +26,9 @@ public class DownloadImage {
             // 可以通过使用openConnection来完成这一操作。
             // openConnection并不需要参数，并且在操作成功之后，
             // 它会返回一个URLConnection class的实例。
-            URLConnection con = url.openConnection();  
-            //设置请求超时为5s  
-            con.setConnectTimeout(5*1000);
-
             System.out.println("tag 1"); 
-            // 输入流  
-            InputStream is = con.getInputStream(); 
-                       
-
-            System.out.println("tag 2");            
+            InputStream is = url.openStream(); 
+            System.out.println("tag 2");          
             // 1K的数据缓冲  
             byte[] bs = new byte[1024];  
             // 读取到的数据长度  
